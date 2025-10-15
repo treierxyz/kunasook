@@ -8,16 +8,12 @@
   }
 
   enum Meal {
-    Breakfast = 0,
-    Lunch = 1,
-    Dinner = 2,
+    Breakfast = 7,
+    Lunch = 12 + 35 / 60,
+    Dinner = 18,
   }
 
   const hoursToMills = (x: number) => x * 3600 * 1000;
-
-  const breakfastBase = 7;
-  const lunchBase = 12 + 35 / 60;
-  const dinnerBase = 18;
 
   function getUnitOrderFromWeek(week: number, unit: Unit) {
     return ((-week % 4) + 4 + unit) % 4;
@@ -57,26 +53,43 @@
     switch (meal) {
       case Meal.Breakfast:
         mealTime = new Date(
-          pureDate.getTime() + hoursToMills(breakfastBase + offset)
+          pureDate.getTime() + hoursToMills(Meal.Breakfast + offset)
         );
         break;
       case Meal.Lunch:
         mealTime = new Date(
-          pureDate.getTime() + hoursToMills(lunchBase + offset)
+          pureDate.getTime() + hoursToMills(Meal.Lunch + offset)
         );
         break;
       case Meal.Dinner:
         mealTime = new Date(
-          pureDate.getTime() + hoursToMills(dinnerBase + offset)
+          pureDate.getTime() + hoursToMills(Meal.Dinner + offset)
         );
         break;
     }
     return mealTime;
   }
 
-  const testdate = new Date("2025-10-14T12:34:56");
+  function getNextMeals(unit: Unit, timeMargin: number): Record<Meal, Date> {
+    function calculateMeal(meal: Meal) {
+      const now = new Date();
+      let nextMeal = getMealTime(meal, unit, now);
+      if (now.getTime() - hoursToMills(timeMargin) > nextMeal.getTime()) {
+        now.setDate(now.getDate() + 1);
+        nextMeal = getMealTime(meal, unit, now);
+      }
+      return nextMeal;
+    }
 
-  console.log(getMealTime(Meal.Breakfast, Unit.Arendus, testdate));
+    const result: Record<Meal, Date> = {
+      [Meal.Breakfast]: calculateMeal(Meal.Breakfast),
+      [Meal.Lunch]: calculateMeal(Meal.Lunch),
+      [Meal.Dinner]: calculateMeal(Meal.Dinner),
+    };
+    return result;
+  }
+
+  console.log(getNextMeals(Unit.Arendus, 0.5));
 </script>
 
 <section class="flex flex-col items-center justify-center h-full gap-3">

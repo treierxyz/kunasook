@@ -70,7 +70,7 @@
     return mealTime;
   }
 
-  function getNextMeals(unit: Unit, timeMargin: number): Record<Meal, Date> {
+  function getNextMeals(unit: Unit, timeMargin: number): [Meal, Date][] {
     function calculateMeal(meal: Meal) {
       const now = new Date();
       let nextMeal = getMealTime(meal, unit, now);
@@ -81,11 +81,12 @@
       return nextMeal;
     }
 
-    const result: Record<Meal, Date> = {
-      [Meal.Breakfast]: calculateMeal(Meal.Breakfast),
-      [Meal.Lunch]: calculateMeal(Meal.Lunch),
-      [Meal.Dinner]: calculateMeal(Meal.Dinner),
-    };
+    const result: [Meal, Date][] = [
+      [Meal.Breakfast, calculateMeal(Meal.Breakfast)],
+      [Meal.Lunch, calculateMeal(Meal.Lunch)],
+      [Meal.Dinner, calculateMeal(Meal.Dinner)],
+    ];
+    result.sort((a, b) => (a[1] > b[1] ? 1 : -1));
     return result;
   }
 

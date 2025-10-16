@@ -90,23 +90,47 @@
     return result;
   }
 
-  console.log(getNextMeals(Unit.Arendus, 0.5));
+  function translateMeals(meal: Meal) {
+    switch (meal) {
+      case Meal.Breakfast:
+        return "hommikusöök";
+      case Meal.Lunch:
+        return "lõuna";
+      case Meal.Dinner:
+        return "õhtusöök";
+      default:
+        break;
+    }
+  }
+
+  // biome-ignore lint/style/useConst: svelte state is not const
+  let selectedUnit: Unit = $state(Unit.Arendus);
 </script>
 
 <section class="flex flex-col items-center justify-center h-full gap-3">
   <section class="text-lg sm:text-xl text-center mx-6">
     <label for="">On {getYearWeek()}. nädal, ehk </label>
-    <select name="" id="" class="border-1 rounded-sm px-1 border-gray-500">
-      <option value="">arendusel</option>
-      <option value="">kasutajatoel</option>
-      <option value="">KIOKe-l</option>
-      <option value="">StTaKo-l</option>
-      <option value="">StratKomKe-l</option>
+    <select
+      name=""
+      id=""
+      bind:value={selectedUnit}
+      class="border-1 rounded-sm px-1 border-gray-500"
+    >
+      <option value={Unit.Arendus}>arendusel</option>
+      <option value={Unit.Kasutajatugi}>kasutajatoel</option>
+      <option value={Unit.KIOKe}>KIOKe-l</option>
+      <option value={Unit.StTaKo}>StTaKo-l</option>
+      <option value={Unit.StratKomKe}>StratKomKe-l</option>
     </select>
-    <label for="">on õhtusöök:</label>
+    <label for=""
+      >on {translateMeals(getNextMeals(selectedUnit, 0.5)[0][0])}:</label
+    >
   </section>
   <h1 class="text-8xl sm:text-9xl font-bold pointer-events-none select-none">
-    18:15
+    {getNextMeals(selectedUnit, 0.5)[0][1].toLocaleTimeString("et-EE", {
+      hour: "2-digit",
+      minute: "2-digit",
+    })}
   </h1>
 </section>
 

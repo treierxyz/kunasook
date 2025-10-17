@@ -130,6 +130,22 @@
       minute: "2-digit",
     })}
   </h1>
+  <p class="text-lg">
+    Lisaks, {translateMeals(getNextMeals(selectedUnit, 0.5)[1][0])} on kell
+    <b
+      >{getNextMeals(selectedUnit, 0.5)[1][1].toLocaleTimeString("et-EE", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}</b
+    >
+    ja {translateMeals(getNextMeals(selectedUnit, 0.5)[2][0])} on kell
+    <b>
+      {getNextMeals(selectedUnit, 0.5)[2][1].toLocaleTimeString("et-EE", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}
+    </b>.
+  </p>
 </section>
 
 <style lang="scss">

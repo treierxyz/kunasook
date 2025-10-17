@@ -52,7 +52,10 @@
     let mealTime: Date;
 
     mealTime = new Date(
-      pureDate.getTime() + hoursToMills(meal + offset + (weekend ? 1 : 0))
+      pureDate.getTime() +
+        hoursToMills(
+          meal + offset + (weekend && meal === Meal.Breakfast ? 1 : 0)
+        )
     );
 
     switch (meal) {

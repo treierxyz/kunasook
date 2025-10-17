@@ -52,9 +52,13 @@
 
     switch (meal) {
       case Meal.Breakfast:
-        mealTime = new Date(
-          pureDate.getTime() + hoursToMills(Meal.Breakfast + offset)
-        );
+        if (unit === Unit.Arendus) {
+          mealTime = new Date(pureDate.getTime() + hoursToMills(6 + 50 / 60));
+        } else {
+          mealTime = new Date(
+            pureDate.getTime() + hoursToMills(Meal.Breakfast + offset)
+          );
+        }
         break;
       case Meal.Lunch:
         mealTime = new Date(

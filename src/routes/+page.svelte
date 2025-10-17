@@ -130,7 +130,7 @@
       minute: "2-digit",
     })}
   </h1>
-  <p class="text-lg">
+  <p class="text-lg text-center mx-6">
     Lisaks, {translateMeals(getNextMeals(selectedUnit, 0.5)[1][0])} on kell
     <b
       >{getNextMeals(selectedUnit, 0.5)[1][1].toLocaleTimeString("et-EE", {

@@ -105,8 +105,10 @@
   let selectedUnit: Unit = $state(Unit.Arendus);
 </script>
 
-<section class="flex flex-col items-center justify-center h-full gap-3">
-  <section class="text-lg sm:text-xl text-center mx-6">
+<section
+  class="flex flex-col items-center justify-center h-full gap-3 text-center"
+>
+  <section class="text-lg sm:text-xl mx-6">
     <label for="">On {getYearWeek()}. nädal, ehk </label>
     <select
       name=""
@@ -130,7 +132,7 @@
       minute: "2-digit",
     })}
   </h1>
-  <p class="text-lg text-center mx-6">
+  <p class="text-lg mx-6">
     Lisaks, {translateMeals(getNextMeals(selectedUnit, 0.5)[1][0])} on kell
     <b
       >{getNextMeals(selectedUnit, 0.5)[1][1].toLocaleTimeString("et-EE", {
@@ -147,6 +149,20 @@
     </b>.
   </p>
 </section>
+<footer class="absolute bottom-0 left-0 right-0 mb-2 flex justify-center gap-1">
+  <a href="https://github.com/treierxyz/kunasook"
+    ><img
+      alt="Static Badge"
+      src="https://img.shields.io/badge/GitHub-gray?logo=github&labelColor=black"
+    />
+  </a>
+  <a href="https://jõgar.ee"
+    ><img
+      alt="Static Badge"
+      src="https://img.shields.io/badge/Koduleht-a3d728"
+    />
+  </a>
+</footer>
 
 <style lang="scss">
 </style>

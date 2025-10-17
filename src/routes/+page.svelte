@@ -47,28 +47,19 @@
     const ordinalDay = getOrdinalDay(date);
     const ordinalWeek = Math.floor(ordinalDay / 7);
     const offset = getUnitOrderFromWeek(ordinalWeek, unit) * (10 / 60);
+    const weekend = [6, 0].includes(date.getDay());
 
     let mealTime: Date;
 
+    mealTime = new Date(
+      pureDate.getTime() + hoursToMills(meal + offset + (weekend ? 1 : 0))
+    );
+
     switch (meal) {
       case Meal.Breakfast:
-        if (unit === Unit.Arendus) {
+        if (unit === Unit.Arendus && !weekend) {
           mealTime = new Date(pureDate.getTime() + hoursToMills(6 + 50 / 60));
-        } else {
-          mealTime = new Date(
-            pureDate.getTime() + hoursToMills(Meal.Breakfast + offset)
-          );
         }
-        break;
-      case Meal.Lunch:
-        mealTime = new Date(
-          pureDate.getTime() + hoursToMills(Meal.Lunch + offset)
-        );
-        break;
-      case Meal.Dinner:
-        mealTime = new Date(
-          pureDate.getTime() + hoursToMills(Meal.Dinner + offset)
-        );
         break;
     }
     return mealTime;
@@ -78,7 +69,7 @@
     function calculateMeal(meal: Meal) {
       const now = new Date();
       let nextMeal = getMealTime(meal, unit, now);
-      if (now.getTime() - hoursToMills(timeMargin) > nextMeal.getTime()) {
+      if (now.getTime() - hoursToMills(timeMargin) >= nextMeal.getTime()) {
         now.setDate(now.getDate() + 1);
         nextMeal = getMealTime(meal, unit, now);
       }

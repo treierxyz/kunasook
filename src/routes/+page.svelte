@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { SvelteDate } from "svelte/reactivity";
+
   enum Unit {
     Kasutajatugi = 0,
     Arendus = 1,
@@ -15,18 +17,34 @@
 
   const hoursToMills = (x: number) => x * 3600 * 1000;
 
+  const now = new SvelteDate();
+  $effect(() => {
+    const interval = setInterval(
+      () => {
+        now.setTime(Date.now());
+      },
+      5 * 60 * 1000
+    );
+
+    return () => {
+      clearInterval(interval);
+    };
+  });
+
   function getUnitOrderFromWeek(week: number, unit: Unit) {
     return ((-week % 4) + 4 + unit) % 4;
   }
 
-  function getYearWeek(date: Date = new Date()) {
-    date.setHours(0, 0, 0, 0);
-    date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
-    const week1 = new Date(date.getFullYear(), 0, 4);
+  function getYearWeek(date: Date = now) {
+    const clone = structuredClone(date);
+    clone.setHours(0, 0, 0, 0);
+
+    clone.setDate(clone.getDate() + 3 - ((clone.getDay() + 6) % 7));
+    const week1 = new Date(clone.getFullYear(), 0, 4);
     return (
       1 +
       Math.round(
-        ((date.getTime() - week1.getTime()) / 86400000 -
+        ((now.getTime() - week1.getTime()) / 86400000 -
           3 +
           ((week1.getDay() + 6) % 7)) /
           7
@@ -70,11 +88,11 @@
 
   function getNextMeals(unit: Unit, timeMargin: number): [Meal, Date][] {
     function calculateMeal(meal: Meal) {
-      const now = new Date();
       let nextMeal = getMealTime(meal, unit, now);
       if (now.getTime() - hoursToMills(timeMargin) >= nextMeal.getTime()) {
-        now.setDate(now.getDate() + 1);
-        nextMeal = getMealTime(meal, unit, now);
+        const clone = structuredClone(now);
+        clone.setDate(now.getDate() + 1);
+        nextMeal = getMealTime(meal, unit, clone);
       }
       return nextMeal;
     }
